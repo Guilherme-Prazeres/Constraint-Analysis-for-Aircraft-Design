@@ -118,12 +118,28 @@ class Performance:
 
 class Atmosfera:
     def __init__(self, perf: Performance):
-        # Parametros Atmosfericos
-        self.SeaLevelDens_kgm3 = ISA.alt2density(0, density_units='kg/m**3', alt_units='m')
-        self.TakeOffDens_kgm3 = ISA.alt2density(perf.TakeOffElevation_m, density_units='kg/m**3', alt_units='m')
-        self.ClimbAltDens_kgm3 = ISA.alt2density(perf.ROCAlt_ft, density_units='kg/m**3', alt_units='ft')
-        self.CruisingAltDens_kgm3 = ISA.alt2density(perf.CruisingAlt_m, density_units='kg/m**3', alt_units='m')
-        self.ApproachDens_kgm3 = ISA.alt2density(perf.TopOfFinalApproach_m, density_units='kg/m**3', alt_units='m')
+        self._perf = perf  # Armazena internamente
+
+    @property
+    def SeaLevelDens_kgm3(self):
+        return ISA.alt2density(0, density_units='kg/m**3', alt_units='m')
+
+    @property
+    def TakeOffDens_kgm3(self):
+        return ISA.alt2density(self._perf.TakeOffElevation_m, density_units='kg/m**3', alt_units='m')
+
+    @property
+    def ClimbAltDens_kgm3(self):
+        return ISA.alt2density(self._perf.ROCAlt_ft, density_units='kg/m**3', alt_units='ft')
+
+    @property
+    def CruisingAltDens_kgm3(self):
+        return ISA.alt2density(self._perf.CruisingAlt_m, density_units='kg/m**3', alt_units='m')
+
+    @property
+    def ApproachDens_kgm3(self):
+        return ISA.alt2density(self._perf.TopOfFinalApproach_m, density_units='kg/m**3', alt_units='m')
+
 
 class Aerodinamica:
     def __init__(self, geo: Geometria, perf: Performance, atm: Atmosfera):
@@ -155,7 +171,6 @@ class Aerodinamica:
     def qApproach_pa(self):
         return 0.5*self.atm.ApproachDens_kgm3*self.perf.ApproachSpeed_mps**2
 
-
 class Restricoes:
     def __init__(self):
         # Parametros para o diagrama de restrição
@@ -176,7 +191,6 @@ class DesignParameters:
         self.rest = Restricoes()
         self.atm = Atmosfera(self.perf)
         self.aero = Aerodinamica(self.geo, self.perf, self.atm)
-
     def resume(self):
         def print_attrs(obj, nome_classe):
             print(f"\n--- {nome_classe} ---")
