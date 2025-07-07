@@ -14,9 +14,3 @@ def ConstraintPoly(WSl, TWl, Col, al):
     pa = Polygon(zp, closed=True, color=Col, alpha=al)
     return pa
 
-
-def PlotSetUp(Xmin, Xmax, Ymin, Ymax, Xlabel, Ylabel):
-    plt.ylim([Ymin, Ymax])
-    plt.xlim([Xmin, Xmax])
-    plt.ylabel(Ylabel)
-    plt.xlabel(Xlabel)
